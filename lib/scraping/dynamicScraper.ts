@@ -6,9 +6,11 @@ export interface DynamicArticle {
   title: string
   url: string
   content?: string
+  description?: string
   author?: string
   source: string
   category: string
+  imageUrl?: string
   publishedAt?: Date
 }
 
@@ -62,14 +64,28 @@ export async function scrapeDynamicSource(source: ScrapingSource): Promise<Dynam
     // Selectores específicos para sitios peruanos
     const siteSelectors = {
       'rpp.pe': {
-        title: '.story-item__title, .story-item__headline, h2, h3, .title',
-        link: '.story-item__link, a[href*="/noticias/"], a[href*="/politica/"]',
-        content: '.story-item__summary, .story-item__excerpt, p'
+        title: '.story-item__title, .story-item__headline, h2, h3, .title, .news-item__title, .story__title',
+        link: '.story-item__link, a[href*="/noticias/"], a[href*="/politica/"], .news-item__link, .story__link',
+        content: '.story-item__summary, .story-item__excerpt, p, .news-item__summary, .story__summary',
+        image: '.story-item__image img, .news-item__image img, img[src*="rpp"], .story-item img, .story__image img, img[src*="s.rpp-noticias.io"], img[src*="s2.rpp-noticias.io"]'
       },
       'peru21.pe': {
-        title: '.story-item__title, .story-item__headline, h2, h3, .title',
-        link: '.story-item__link, a[href*="/noticias/"], a[href*="/politica/"]',
-        content: '.story-item__summary, .story-item__excerpt, p'
+        title: '.story-item__title, .story-item__headline, h2, h3, .title, .news-item__title, .story__title',
+        link: '.story-item__link, a[href*="/noticias/"], a[href*="/politica/"], .news-item__link, .story__link',
+        content: '.story-item__summary, .story-item__excerpt, p, .news-item__summary, .story__summary',
+        image: '.story-item__image img, .news-item__image img, img[src*="peru21"], .story-item img, .story__image img, img[src*="peru21.pe"], img[src*="cdn.peru21.pe"]'
+      },
+      'elcomercio.pe': {
+        title: '.story-item__title, .story-item__headline, h2, h3, .title, .news-item__title',
+        link: '.story-item__link, a[href*="/noticias/"], a[href*="/politica/"], .news-item__link',
+        content: '.story-item__summary, .story-item__excerpt, p, .news-item__summary',
+        image: '.story-item__image img, .news-item__image img, img[src*="elcomercio"], .story-item img'
+      },
+      'larepublica.pe': {
+        title: '.story-item__title, .story-item__headline, h2, h3, .title, .news-item__title',
+        link: '.story-item__link, a[href*="/noticias/"], a[href*="/politica/"], .news-item__link',
+        content: '.story-item__summary, .story-item__excerpt, p, .news-item__summary',
+        image: '.story-item__image img, .news-item__image img, img[src*="larepublica"], .story-item img'
       }
     }
     
@@ -81,6 +97,10 @@ export async function scrapeDynamicSource(source: ScrapingSource): Promise<Dynam
       selectors = siteSelectors['rpp.pe']
     } else if (source.url.includes('peru21.pe')) {
       selectors = siteSelectors['peru21.pe']
+    } else if (source.url.includes('elcomercio.pe')) {
+      selectors = siteSelectors['elcomercio.pe']
+    } else if (source.url.includes('larepublica.pe')) {
+      selectors = siteSelectors['larepublica.pe']
     } else if (source.url.includes('blog') || source.url.includes('wordpress')) {
       selectors = defaultSelectors.blog
     } else if (source.url.includes('reddit') || source.url.includes('hackernews')) {
@@ -128,11 +148,75 @@ export async function scrapeDynamicSource(source: ScrapingSource): Promise<Dynam
           }
         }
         
-        // Extraer contenido si está disponible
+        // Extraer contenido/descripción si está disponible
         let content = ''
-        const $content = $element.siblings().find(selectors.content).first()
+        let description = ''
+        
+        // Buscar descripción en el elemento actual
+        const $content = $element.find(selectors.content).first()
         if ($content.length > 0) {
-          content = $content.text().trim().substring(0, 500)
+          content = $content.text().trim()
+        }
+        
+        // Si no se encontró, buscar en elementos hermanos
+        if (!content) {
+          const $siblingContent = $element.siblings().find(selectors.content).first()
+          if ($siblingContent.length > 0) {
+            content = $siblingContent.text().trim()
+          }
+        }
+        
+        // Si no se encontró, buscar en el contenedor padre
+        if (!content) {
+          const $parentContent = $element.closest('div, article, section').find(selectors.content).first()
+          if ($parentContent.length > 0) {
+            content = $parentContent.text().trim()
+          }
+        }
+        
+        // Buscar descripción en meta tags
+        if (!content) {
+          const $metaDesc = $('meta[name="description"]').attr('content')
+          if ($metaDesc) {
+            content = $metaDesc.trim()
+          }
+        }
+        
+        // Limitar la longitud y usar como descripción
+        if (content) {
+          description = content.substring(0, 300)
+          content = content.substring(0, 500)
+        }
+        
+        // Extraer imagen si está disponible
+        let imageUrl = ''
+        if (selectors.image) {
+          const $image = $element.find(selectors.image).first()
+          if ($image.length > 0) {
+            imageUrl = $image.attr('src') || $image.attr('data-src') || ''
+            if (imageUrl && !imageUrl.startsWith('http')) {
+              if (imageUrl.startsWith('/')) {
+                imageUrl = new URL(source.url).origin + imageUrl
+              } else {
+                imageUrl = new URL(imageUrl, source.url).href
+              }
+            }
+          }
+        }
+        
+        // Si no se encontró imagen en el elemento, buscar en el contenedor
+        if (!imageUrl && selectors.image) {
+          const $containerImage = $element.closest('div, article, section').find(selectors.image).first()
+          if ($containerImage.length > 0) {
+            imageUrl = $containerImage.attr('src') || $containerImage.attr('data-src') || ''
+            if (imageUrl && !imageUrl.startsWith('http')) {
+              if (imageUrl.startsWith('/')) {
+                imageUrl = new URL(source.url).origin + imageUrl
+              } else {
+                imageUrl = new URL(imageUrl, source.url).href
+              }
+            }
+          }
         }
         
         if (title && url) {
@@ -140,6 +224,8 @@ export async function scrapeDynamicSource(source: ScrapingSource): Promise<Dynam
             title,
             url,
             content: content || undefined,
+            description: description || undefined,
+            imageUrl: imageUrl || undefined,
             source: source.name,
             category: source.category,
             publishedAt: new Date()
@@ -165,9 +251,11 @@ export async function saveDynamicArticles(articles: DynamicArticle[]): Promise<v
         update: {
           title: article.title,
           content: article.content,
+          description: article.description,
           author: article.author,
           source: article.source,
           category: article.category,
+          imageUrl: article.imageUrl,
           publishedAt: article.publishedAt,
           updatedAt: new Date()
         },
@@ -175,9 +263,11 @@ export async function saveDynamicArticles(articles: DynamicArticle[]): Promise<v
           title: article.title,
           url: article.url,
           content: article.content,
+          description: article.description,
           author: article.author,
           source: article.source,
           category: article.category,
+          imageUrl: article.imageUrl,
           publishedAt: article.publishedAt
         }
       })
