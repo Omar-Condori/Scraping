@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Article {
+  id          String   @id @default(cuid())
+  title       String
+  url         String   @unique
+  content     String?
+  description String?  // Descripción corta del artículo
+  imageUrl    String?  // URL de la imagen principal
+  author      String?
+  source      String
+  category    String?
+  publishedAt DateTime?
+  scrapedAt   DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("articles")
+}
+
+
+model ScrapingLog {
+  id        String   @id @default(cuid())
+  source    String
+  status    String   // 'success', 'error', 'partial'
+  message   String?
+  count     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@map("scraping_logs")
+}
+
+model ScrapingSource {
+  id          String   @id @default(cuid())
+  name        String
+  url         String   @unique
+  category    String
+  description String?
+  isActive    Boolean  @default(true)
+  selector    String?  // CSS selector para extraer datos
+  maxItems    Int      @default(50)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("scraping_sources")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  color       String?  // Color para la UI
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("categories")
+}

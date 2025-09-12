@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: scraping_postgres
+    environment:
+      POSTGRES_DB: scraping_db
+      POSTGRES_USER: scraping_user
+      POSTGRES_PASSWORD: scraping_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scraping_user -d scraping_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Aplicación Next.js
+  app:
+    build: .
+    container_name: scraping_app
+    environment:
+      DATABASE_URL: "postgresql://scraping_user:scraping_password@postgres:5432/scraping_db"
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: >
+      sh -c "
+        npx prisma migrate deploy &&
+        npx prisma generate &&
+        npm run start
+      "
+
+volumes:
+  postgres_data:
+
+
+
+
