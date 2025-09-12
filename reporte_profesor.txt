@@ -1,0 +1,142 @@
+
+REPORTE DE BASE DE DATOS - SCRAPING DE NOTICIAS EL COMERCIO
+============================================================
+
+INFORMACIÓN GENERAL:
+- Fecha de creación: 2025-09-05 10:26:44
+- Base de datos: noticias_elcomercio.db
+- Fuente: El Comercio (elcomercio.pe)
+- Período analizado: Semana del 01/09/2025 al 07/09/2025
+
+ESTADÍSTICAS GENERALES:
+- Total de noticias: 8
+- Categorías únicas: 5
+- Promedio de longitud: 3584 caracteres
+- Noticia más larga: Alejandro Toledo lavó millones de dólares producto de coimas: Caso Ecoteva
+- Noticia más corta: Betssy Chávez sale en libertad tras sentencia del Tribunal Constitucional
+
+DISTRIBUCIÓN POR CATEGORÍAS:
+- Política: 2 noticias
+- Mundo: 2 noticias
+- Entretenimiento: 2 noticias
+- Economía: 1 noticias
+- Deportes: 1 noticias
+
+DETALLE DE NOTICIAS:
+===================
+
+1. TÍTULO: "Lord of Mysteries" Capítulo 12: Hora confirmada de estreno
+   CATEGORÍA: Entretenimiento
+   FECHA: 2025-09-05
+   LONGITUD: 2605 caracteres
+   ENLACE: https://elcomercio.pe/saltar-intro/noticias/lord-of-mysteries-capitulo-12-hora-confirmada-de-estreno-crunchyroll-noticia/
+   RESUMEN: Información sobre el estreno del capítulo 12 de Lord of Mysteries en Crunchyroll...
+
+2. TÍTULO: "Kaiju No.8" Temporada 2, Capítulo 8: Hora confirmada de estreno
+   CATEGORÍA: Entretenimiento
+   FECHA: 2025-09-05
+   LONGITUD: 1484 caracteres
+   ENLACE: https://elcomercio.pe/saltar-intro/noticias/kaiju-no8-temporada-2-capitulo-8-hora-confirmada-de-estreno-crunchyroll-noticia/
+   RESUMEN: Nuevo episodio de Kaiju No.8 disponible en plataformas de streaming...
+
+3. TÍTULO: Betssy Chávez sale en libertad tras sentencia del Tribunal Constitucional
+   CATEGORÍA: Política
+   FECHA: 2025-09-05
+   LONGITUD: 1145 caracteres
+   ENLACE: https://elcomercio.pe/politica/actualidad/betssy-chavez-sale-en-libertad-tras-sentencia-del-tribunal-constitucional-que-anulo-su-prision-preventiva-ultimas-noticia/
+   RESUMEN: La exministra de Pedro Castillo recupera su libertad tras decisión judicial...
+
+4. TÍTULO: Alejandro Toledo lavó millones de dólares producto de coimas: Caso Ecoteva
+   CATEGORÍA: Política
+   FECHA: 2025-09-04
+   LONGITUD: 8003 caracteres
+   ENLACE: https://elcomercio.pe/politica/alejandro-toledo-lavo-dinero-ilicito-estos-fueron-los-argumentos-para-condenarlo-por-el-caso-ecoteva-tlcnota-noticia/
+   RESUMEN: Nuevas revelaciones sobre el lavado de dinero del expresidente Toledo...
+
+5. TÍTULO: Gobierno aprueba reglamento de modernización del sistema de pensiones
+   CATEGORÍA: Economía
+   FECHA: 2025-09-04
+   LONGITUD: 2564 caracteres
+   ENLACE: https://elcomercio.pe/economia/peru/gobierno-aprueba-reglamento-de-modernizacion-del-sistema-de-pensiones-l-onp-l-afp-l-ultimas-noticia/
+   RESUMEN: Nuevas regulaciones para el sistema de pensiones en Perú...
+
+6. TÍTULO: Argentina: cinco claves para entender la elección legislativa de Buenos Aires
+   CATEGORÍA: Mundo
+   FECHA: 2025-09-03
+   LONGITUD: 5468 caracteres
+   ENLACE: https://elcomercio.pe/mundo/latinoamerica/argentina-cinco-claves-para-entender-la-importancia-de-la-eleccion-legislativa-de-la-provincia-de-buenos-aires-ultimas-noticia/
+   RESUMEN: Análisis de las elecciones legislativas en la provincia de Buenos Aires...
+
+7. TÍTULO: Zelensky espera que países europeos desplieguen miles de soldados en Ucrania
+   CATEGORÍA: Mundo
+   FECHA: 2025-09-02
+   LONGITUD: 4200 caracteres
+   ENLACE: https://elcomercio.pe/mundo/europa/guerra-rusia-ucrania-volodymyr-zelensky-espera-que-paises-europeos-desplieguen-miles-soldados-en-ucrania-tras-alto-el-fuego-vladimir-putin-coalicion-de-voluntarios-ultimas-noticia/
+   RESUMEN: El presidente ucraniano solicita mayor apoyo militar europeo...
+
+8. TÍTULO: Diego Rebagliati: "Si Perú quiere volver al Mundial, el próximo técnico debe tener estas cualidades"
+   CATEGORÍA: Deportes
+   FECHA: 2025-09-01
+   LONGITUD: 3200 caracteres
+   ENLACE: https://elcomercio.pe/respuestas/deportes/lo-tiene-claro-diego-rebagliati-aseguro-que-si-peru-quiere-volver-al-mundial-el-proximo-tecnico-debe-ser-asi-el-perfil-tdpe-noticia/
+   RESUMEN: Análisis del periodista deportivo sobre el futuro técnico de la selección peruana...
+
+ESTRUCTURA DE LA BASE DE DATOS:
+===============================
+
+TABLA: noticias
+- id (INTEGER, PRIMARY KEY)
+- titulo (TEXT, NOT NULL)
+- categoria (TEXT, NOT NULL)
+- resumen (TEXT)
+- contenido_completo (TEXT)
+- fecha_publicacion (TEXT)
+- fecha_extraccion (TEXT, NOT NULL)
+- enlace (TEXT, NOT NULL)
+- longitud_contenido (INTEGER)
+- selector_utilizado (TEXT)
+- fuente (TEXT, DEFAULT 'El Comercio')
+
+TABLA: categorias
+- id (INTEGER, PRIMARY KEY)
+- nombre (TEXT, UNIQUE, NOT NULL)
+- descripcion (TEXT)
+- total_noticias (INTEGER, DEFAULT 0)
+
+TABLA: estadisticas
+- id (INTEGER, PRIMARY KEY)
+- fecha_extraccion (TEXT, NOT NULL)
+- total_noticias (INTEGER)
+- categorias_unicas (INTEGER)
+- promedio_longitud (REAL)
+- noticia_mas_larga (TEXT)
+- noticia_mas_corta (TEXT)
+
+TECNOLOGÍAS UTILIZADAS:
+======================
+- Python 3.9
+- Selenium WebDriver
+- BeautifulSoup4
+- SQLite3
+- Pandas
+- OpenPyXL
+
+METODOLOGÍA:
+===========
+1. Web Scraping con Selenium para contenido dinámico
+2. Análisis de HTML con BeautifulSoup
+3. Extracción de contenido con múltiples selectores CSS
+4. Clasificación automática por categorías
+5. Almacenamiento estructurado en base de datos SQLite
+6. Generación de reportes en Excel y texto
+
+CONCLUSIONES:
+============
+- Se extrajeron exitosamente 8 noticias de El Comercio
+- El sistema de clasificación automática funcionó correctamente
+- La base de datos permite consultas eficientes y análisis estadísticos
+- El contenido extraído incluye títulos, resúmenes y texto completo
+- La metodología es replicable para otros sitios de noticias
+
+============================================================
+Reporte generado automáticamente el 2025-09-05 10:26:44
