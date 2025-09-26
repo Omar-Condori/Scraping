@@ -8,7 +8,8 @@ import {
   Search,
   Filter,
   Settings,
-  Globe
+  Globe,
+  Brain
 } from 'lucide-react'
 
 interface Stats {
@@ -192,6 +193,26 @@ export default function Home() {
                 </p>
                 <div className="mt-4 flex items-center text-primary-600 group-hover:text-primary-700">
                   <span className="text-sm font-medium">Ver dashboard</span>
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/ml-dashboard" className="group">
+              <div className="card hover:shadow-md transition-shadow duration-200">
+                <div className="flex items-center mb-4">
+                  <Brain className="w-8 h-8 text-purple-600" />
+                  <h3 className="text-lg font-semibold text-gray-900 ml-3">
+                    ML Dashboard
+                  </h3>
+                </div>
+                <p className="text-gray-600 text-sm">
+                  Análisis inteligente con regresión logística
+                </p>
+                <div className="mt-4 flex items-center text-primary-600 group-hover:text-primary-700">
+                  <span className="text-sm font-medium">Ver análisis ML</span>
                   <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
