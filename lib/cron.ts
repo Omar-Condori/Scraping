@@ -72,6 +72,6 @@ export function startCronJobs(): void {
 
 export function stopCronJobs(): void {
   console.log('🛑 Deteniendo cron jobs...')
-  cron.getTasks().forEach(task => task.destroy())
+  cron.getTasks().forEach(task => task.stop())
   console.log('✅ Cron jobs detenidos')
 }

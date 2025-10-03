@@ -139,6 +139,9 @@ database_export.zip
 !scripts/initCategories.ts
 !scripts/scrape-cron.js
 
+# Permitir carpeta lib
+!lib/
+
 # Archivos de predicción
 prediction_history.json
 training_metadata.json
