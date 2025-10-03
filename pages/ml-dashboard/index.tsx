@@ -91,7 +91,7 @@ const MLDashboard: React.FC = () => {
       const data = await response.json()
       
       if (data.success) {
-        setAnalysisResults(prev => ({
+        setAnalysisResults((prev: any) => ({
           ...prev,
           comparison: data.output
         }))
