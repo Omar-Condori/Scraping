@@ -190,8 +190,8 @@ export async function scrapeDynamicSource(source: ScrapingSource): Promise<Dynam
         
         // Extraer imagen si está disponible
         let imageUrl = ''
-        if (selectors.image) {
-          const $image = $element.find(selectors.image).first()
+        if ((selectors as any).image) {
+          const $image = $element.find((selectors as any).image).first()
           if ($image.length > 0) {
             imageUrl = $image.attr('src') || $image.attr('data-src') || ''
             if (imageUrl && !imageUrl.startsWith('http')) {
@@ -205,8 +205,8 @@ export async function scrapeDynamicSource(source: ScrapingSource): Promise<Dynam
         }
         
         // Si no se encontró imagen en el elemento, buscar en el contenedor
-        if (!imageUrl && selectors.image) {
-          const $containerImage = $element.closest('div, article, section').find(selectors.image).first()
+        if (!imageUrl && (selectors as any).image) {
+          const $containerImage = $element.closest('div, article, section').find((selectors as any).image).first()
           if ($containerImage.length > 0) {
             imageUrl = $containerImage.attr('src') || $containerImage.attr('data-src') || ''
             if (imageUrl && !imageUrl.startsWith('http')) {
