@@ -30,7 +30,7 @@ async function loadPredictionSystem() {
         }
       })
     })
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(`Error inicializando sistema: ${error.message}`)
   }
 }
@@ -115,7 +115,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       errorOutput += data.toString()
     })
 
-    pythonProcess.on('close', (code) => {
+    pythonProcess.on('close', (code: number | null) => {
       if (code === 0) {
         try {
           const result = JSON.parse(output.trim())
@@ -125,7 +125,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data: result,
             message: `Predicción ${action} completada exitosamente`
           })
-        } catch (parseError) {
+        } catch (parseError: any) {
           res.status(200).json({
             success: true,
             action,
