@@ -134,7 +134,7 @@ export async function scrapeDynamicSource(source: ScrapingSource): Promise<Dynam
         }
         
         if ($link.length === 0) {
-          $link = $element.closest('a')
+          $link = $element.closest('a') as any
         }
         
         if ($link.length > 0) {
