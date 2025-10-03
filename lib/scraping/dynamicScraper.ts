@@ -19,9 +19,9 @@ export interface ScrapingSource {
   name: string
   url: string
   category: string
-  description?: string
+  description?: string | null
   isActive: boolean
-  selector?: string
+  selector?: string | null
   maxItems: number
 }
 
