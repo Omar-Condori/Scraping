@@ -23,6 +23,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ error: 'El nombre de la categoría es requerido' })
       }
       
+      // Validar longitud del nombre
+      if (name.trim().length < 2) {
+        return res.status(400).json({ error: 'El nombre debe tener al menos 2 caracteres' })
+      }
+      
       const category = await prisma.category.create({
         data: {
           name: name.trim(),
