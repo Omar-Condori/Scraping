@@ -44,6 +44,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             } else if (algorithm === 'xgboost') {
               pythonScript = path.join(process.cwd(), 'ml_xgboost_analysis.py')
               args = ['--type', analysisType]
+            } else if (algorithm === 'neural') {
+              pythonScript = path.join(process.cwd(), 'ml_neural_network_analysis.py')
+              args = ['--type', analysisType]
             } else {
               pythonScript = path.join(process.cwd(), 'ml_specific_analysis.py')
               args = ['--type', analysisType]

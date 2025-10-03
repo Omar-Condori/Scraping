@@ -310,6 +310,12 @@ const MLDashboard: React.FC = () => {
               >
                 XGBoost
               </button>
+              <button
+                onClick={() => runMLAnalysis(analysis.type, 'neural')}
+                className="px-3 py-1 bg-cyan-600 text-white text-sm rounded hover:bg-cyan-700"
+              >
+                Red Neuronal
+              </button>
                     </div>
                   </div>
                 ))}

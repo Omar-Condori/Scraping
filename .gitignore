@@ -108,3 +108,37 @@ prisma/migrations/
 # Archivos de configuración local
 config.ini
 secrets.py
+
+# Archivos de ML y modelos
+*.h5
+*.pkl
+*.joblib
+*.model
+
+# Archivos de datos grandes
+*.csv
+*.xlsx
+*.json
+database_export/
+database_export.zip
+
+# Archivos de imágenes generadas
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# Archivos de reportes
+*.pdf
+*.md
+!README.md
+
+# Archivos de Python específicos
+*.py
+!scripts/initCategories.ts
+!scripts/scrape-cron.js
+
+# Archivos de predicción
+prediction_history.json
+training_metadata.json
+preprocessing_metadata.json

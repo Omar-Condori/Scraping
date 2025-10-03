@@ -9,7 +9,8 @@ import {
   Filter,
   Settings,
   Globe,
-  Brain
+  Brain,
+  Zap
 } from 'lucide-react'
 
 interface Stats {
@@ -158,7 +159,7 @@ export default function Home() {
           </div>
 
           {/* Navigation Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             <Link href="/articles" className="group">
               <div className="card hover:shadow-md transition-shadow duration-200">
                 <div className="flex items-center mb-4">
@@ -213,6 +214,26 @@ export default function Home() {
                 </p>
                 <div className="mt-4 flex items-center text-primary-600 group-hover:text-primary-700">
                   <span className="text-sm font-medium">Ver análisis ML</span>
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/prediction-dashboard" className="group">
+              <div className="card hover:shadow-md transition-shadow duration-200">
+                <div className="flex items-center mb-4">
+                  <Zap className="w-8 h-8 text-cyan-600" />
+                  <h3 className="text-lg font-semibold text-gray-900 ml-3">
+                    Predicción en Tiempo Real
+                  </h3>
+                </div>
+                <p className="text-gray-600 text-sm">
+                  Clasificación automática con red neuronal
+                </p>
+                <div className="mt-4 flex items-center text-primary-600 group-hover:text-primary-700">
+                  <span className="text-sm font-medium">Ver predicciones</span>
                   <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>

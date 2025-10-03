@@ -1,0 +1,33 @@
+name: Auto Scraping
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Cada 6 horas
+  workflow_dispatch:  # Permite ejecutar manualmente
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Run scraping
+        run: |
+          echo "🚀 Iniciando scraping automático..."
+          curl -X POST https://scraping-news-omar.vercel.app/api/scrape-dynamic
+          echo "✅ Scraping completado"
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          
+      - name: Notify completion
+        run: |
+          echo "🎉 Scraping automático ejecutado exitosamente"
+          echo "Fecha: $(date)"
