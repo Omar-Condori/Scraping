@@ -132,6 +132,7 @@ database_export.zip
 *.pdf
 *.md
 !README.md
+!DEPLOYMENT_GUIDE.md
 
 # Archivos de Python específicos
 *.py
