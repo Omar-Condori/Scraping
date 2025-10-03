@@ -18,18 +18,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const { name, description, color } = req.body
       
+      // Validar que el nombre no esté vacío
+      if (!name || name.trim() === '') {
+        return res.status(400).json({ error: 'El nombre de la categoría es requerido' })
+      }
+      
       const category = await prisma.category.create({
         data: {
-          name,
-          description,
-          color
+          name: name.trim(),
+          description: description?.trim() || null,
+          color: color || null,
+          isActive: true
         }
       })
       
       res.status(201).json({ category })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating category:', error)
-      if (error instanceof Error && error.message.includes('Unique constraint')) {
+      if (error.code === 'P2002' || (error.message && error.message.includes('Unique constraint'))) {
         res.status(400).json({ error: 'Esta categoría ya existe' })
       } else {
         res.status(500).json({ error: 'Error interno del servidor' })
