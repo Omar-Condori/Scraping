@@ -38,7 +38,7 @@ const MLDashboard: React.FC = () => {
       } else {
         console.error('Error cargando datos ML:', data.error)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error cargando datos ML:', error)
     } finally {
       setLoading(false)
@@ -65,7 +65,7 @@ const MLDashboard: React.FC = () => {
       const data = await response.json()
       
       if (data.success) {
-        setAnalysisResults(prev => ({
+        setAnalysisResults((prev: any) => ({
           ...prev,
           [`${analysisType}_${algorithm}`]: data.output
         }))
@@ -74,7 +74,7 @@ const MLDashboard: React.FC = () => {
       } else {
         alert(`Error: ${data.message}`)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error ejecutando análisis:', error)
       alert('Error ejecutando análisis')
     }
@@ -99,7 +99,7 @@ const MLDashboard: React.FC = () => {
       } else {
         alert(`Error: ${data.message}`)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error ejecutando análisis comparativo:', error)
       alert('Error ejecutando análisis comparativo')
     }
