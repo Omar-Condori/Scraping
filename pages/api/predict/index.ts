@@ -21,7 +21,7 @@ async function loadPredictionSystem() {
     })
     
     return new Promise((resolve, reject) => {
-      pythonProcess.on('close', (code) => {
+      pythonProcess.on('close', (code: number | null) => {
         if (code === 0) {
           predictionSystem = { loaded: true }
           resolve(predictionSystem)
