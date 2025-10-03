@@ -4,7 +4,7 @@ import path from 'path'
 import fs from 'fs'
 
 // Cargar el sistema de predicción
-let predictionSystem = null
+let predictionSystem: any = null
 
 // Función para cargar el sistema de predicción
 async function loadPredictionSystem() {
