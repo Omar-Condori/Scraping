@@ -26,6 +26,7 @@ export default function Home() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [loading, setLoading] = useState(true)
   const [scraping, setScraping] = useState(false)
+  const [initializing, setInitializing] = useState(false)
 
   useEffect(() => {
     fetchStats()
@@ -61,6 +62,25 @@ export default function Home() {
     }
   }
 
+  const handleInitialize = async () => {
+    setInitializing(true)
+    try {
+      const response = await fetch('/api/init', { method: 'POST' })
+      const data = await response.json()
+      if (data.success) {
+        alert(`Proyecto inicializado exitosamente!\n- Categorías: ${data.data.categories}\n- Fuentes: ${data.data.sources}`)
+        await fetchStats() // Recargar estadísticas
+      } else {
+        alert(`Error: ${data.message}`)
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      alert('Error inicializando proyecto')
+    } finally {
+      setInitializing(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -91,14 +111,24 @@ export default function Home() {
                   Recolección automática de datos de múltiples fuentes
                 </p>
               </div>
-              <button
-                onClick={handleScraping}
-                disabled={scraping}
-                className="btn-primary flex items-center gap-2 disabled:opacity-50"
-              >
-                <RefreshCw className={`w-4 h-4 ${scraping ? 'animate-spin' : ''}`} />
-                {scraping ? 'Scraping...' : 'Ejecutar Scraping'}
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleInitialize}
+                  disabled={initializing}
+                  className="btn-secondary flex items-center gap-2 disabled:opacity-50"
+                >
+                  <Zap className={`w-4 h-4 ${initializing ? 'animate-pulse' : ''}`} />
+                  {initializing ? 'Inicializando...' : 'Inicializar Proyecto'}
+                </button>
+                <button
+                  onClick={handleScraping}
+                  disabled={scraping}
+                  className="btn-primary flex items-center gap-2 disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-4 h-4 ${scraping ? 'animate-spin' : ''}`} />
+                  {scraping ? 'Scraping...' : 'Ejecutar Scraping'}
+                </button>
+              </div>
             </div>
           </div>
         </header>
